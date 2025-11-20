@@ -592,32 +592,16 @@
                 maxPredictions = model.getTotalClasses();
 
                 const flip = true;
-                   webcam = new tmImage.Webcam(400, 400, flip);
+                    webcam = new tmImage.Webcam(400, 400, flip);
 
-                    try {
-                        // Try to force back camera first
-                        const constraints = {
-                            audio: false,
-                            video: {
-                                facingMode: { ideal: "environment" }
-                            }
-                        };
-
-                        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-
-                        // Use the actual deviceId of the back camera
-                        const backCamId = stream.getVideoTracks()[0].getSettings().deviceId;
-
-                        await webcam.setup({ deviceId: backCamId });
-                    }
-                    catch (err) {
-                        // If anything fails → fallback to normal webcam
-                        console.warn("Back camera not available, using default.", err);
-                        await webcam.setup();
-                    }
+                    // Force mobile to use back camera
+                    await webcam.setup({
+                        video: { facingMode: { exact: "environment" } }
+                    }).catch(async () => {
+                        await webcam.setup({ video: { facingMode: "environment" } });
+                    });
 
                     await webcam.play();
-
 
                 isRunning = true;
                 window.requestAnimationFrame(loop);
