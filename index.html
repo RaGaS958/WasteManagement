@@ -270,6 +270,7 @@
             border-radius: 15px;
             margin-bottom: 20px;
             text-align: center;
+            display: inline-block;
         }
 
         .top-prediction h3 {
@@ -495,6 +496,13 @@
                 <div class="stat-label">E-Waste</div>
             </div>
         </div>
+          <div class="card disposal-section">
+                <h2>🗑️ Dispose & Earn Points</h2>
+                <button id="dispose-btn" onclick="disposeWaste()" disabled>
+                    ♻️ Dispose Waste
+                </button>
+                <div id="points-earned" class="points-earned"></div>
+            </div>
 
         <div id="status" class="status loading">Click Start to begin</div>
 
@@ -514,17 +522,13 @@
 
             <div class="card predictions-section">
                 <h2>📊 Live Predictions</h2>
-                <div id="top-prediction"></div>
+                <div id="top-prediction">
+                    <h3></h3>
+                </div>
                 <div id="label-container"></div>
             </div>
 
-            <div class="card disposal-section">
-                <h2>🗑️ Dispose & Earn Points</h2>
-                <button id="dispose-btn" onclick="disposeWaste()" disabled>
-                    ♻️ Dispose Waste
-                </button>
-                <div id="points-earned" class="points-earned"></div>
-            </div>
+          
 
             <div class="card history-section">
                 <h2>📚 Disposal History</h2>
@@ -588,9 +592,16 @@
                 maxPredictions = model.getTotalClasses();
 
                 const flip = true;
-                webcam = new tmImage.Webcam(400, 400, flip);
-                await webcam.setup();
-                await webcam.play();
+                    webcam = new tmImage.Webcam(400, 400, flip);
+
+                    // Force mobile to use back camera
+                    await webcam.setup({
+                        video: { facingMode: { exact: "environment" } }
+                    }).catch(async () => {
+                        await webcam.setup({ video: { facingMode: "environment" } });
+                    });
+
+                    await webcam.play();
 
                 isRunning = true;
                 window.requestAnimationFrame(loop);
@@ -670,7 +681,6 @@
                 topPred.style.display = 'block';
                 document.getElementById('dispose-btn').disabled = false;
             } else {
-                topPred.style.display = 'none';
                 document.getElementById('dispose-btn').disabled = true;
             }
 
