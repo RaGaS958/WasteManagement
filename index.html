@@ -288,12 +288,12 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
-        .disposal-section {
+        #disposal-section {
             grid-column: 1 / -1;
             text-align: center;
         }
 
-        .disposal-section h2 {
+        #disposal-section h2 {
             margin-bottom: 20px;
             color: #2d5016;
         }
@@ -496,13 +496,7 @@
                 <div class="stat-label">E-Waste</div>
             </div>
         </div>
-          <div class="card disposal-section">
-                <h2>🗑️ Dispose & Earn Points</h2>
-                <button id="dispose-btn" onclick="disposeWaste()" disabled>
-                    ♻️ Dispose Waste
-                </button>
-                <div id="points-earned" class="points-earned"></div>
-            </div>
+         
 
         <div id="status" class="status loading">Click Start to begin</div>
 
@@ -515,6 +509,12 @@
                 </div>
                 <div class="controls">
                     <button id="start-btn" onclick="init()">🚀 Start</button>
+                       <div class="hidden"  id="card disposal-section" >
+                        <button  id="dispose-btn" onclick="disposeWaste()" disabled>
+                            ♻️ Dispose Waste
+                        </button>
+                        <div  id="points-earned" class="points-earned"></div>
+                    </div>
                     <button id="stop-btn" class="hidden" onclick="stopWebcam()">⏹️ Stop</button>
                     <button id="capture-btn" class="hidden" onclick="captureImage()">📸 Capture</button>
                 </div>
@@ -618,6 +618,7 @@
 
                 document.getElementById('start-btn').classList.add('hidden');
                 document.getElementById('stop-btn').classList.remove('hidden');
+                document.getElementById('card disposal-section').classList.remove('hidden');
                 document.getElementById('capture-btn').classList.remove('hidden');
 
                 updateStatus('✅ Active - Detecting objects...', 'ready');
